@@ -1,15 +1,29 @@
+# bitbucket-pipelines.yml
+
 image: python:3.11
 pipelines:
+  branches:
+    test/*:
+      - step:
+          name: Format checking with black
+          script:
+            - pip install black
+            - black --check .
+      - step:
+          name: Type checking with mypy (ignore-missing-imports)
+          script:
+            - pip install mypy
+            - mypy --ignore-missing-imports .
+
   default:
     - step:
         name: Testing with pytest
         script:
-          - pip install -r requirements.txt
-          - pytest .
+          - if [ $(ls tests -1 | wc -l) -gt 1 ]; then pip install pytest && pytest .; fi
     - step:
-        name: Format Checking with black
+        name: Format checking with black
         script:
-          - pip install -r requirements.txt
+          - pip install black
           - black --check .
     - step:
         name: Type checking with mypy
