@@ -1,4 +1,6 @@
 import enum
+
+
 @enum.unique
 class Piece(enum.Enum):
     """An enum of piece animal."""
