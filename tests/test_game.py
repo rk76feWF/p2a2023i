@@ -15,8 +15,8 @@ def test_init():
     assert g.hands == (empty_hands, empty_hands)
     assert g.table == [
         [(False, Piece.GIRAFFE), (False, Piece.LION), (False, Piece.ELEPHANT)],
-        [None, (False, Piece.CHICK), None],
         [None, (True, Piece.CHICK), None],
+        [None, (False, Piece.CHICK), None],
         [(True, Piece.ELEPHANT), (True, Piece.LION), (True, Piece.GIRAFFE)],
     ]
 
@@ -28,7 +28,7 @@ def test_init():
     assert g.hands == (having_chick, empty_hands)
     assert g.table == [
         [(False, Piece.GIRAFFE), (False, Piece.LION), (False, Piece.ELEPHANT)],
-        [None, None, None],
         [None, (False, Piece.CHICK), None],
+        [None, None, None],
         [(True, Piece.ELEPHANT), (True, Piece.LION), (True, Piece.GIRAFFE)],
     ]
