@@ -32,3 +32,18 @@ def test_init():
         [None, None, None],
         [(True, Piece.ELEPHANT), (True, Piece.LION), (True, Piece.GIRAFFE)],
     ]
+
+    g = Game(f"1\n000001\nGEC\n....\n")
+    assert g.turn == 1
+    empty_hands = {
+        Piece.GIRAFFE: 1,
+        Piece.ELEPHANT: 1,
+        Piece.CHICK: 1,
+    }
+    assert g.hands == (empty_hands, empty_hands)
+    assert g.table == [
+        [(False, Piece.GIRAFFE), None, (False, Piece.ELEPHANT)],
+        [None, (False, Piece.CHICK), None],
+        [None, (True, Piece.CHICK), None],
+        [(True, Piece.ELEPHANT), None, (True, Piece.GIRAFFE)],
+    ]
