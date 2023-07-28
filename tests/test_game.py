@@ -27,10 +27,10 @@ def test_init():
     having_chick[Piece.CHICK] = 1
     assert g.hands == (having_chick, empty_hands)
     assert g.table == [
-        [(False, Piece.GIRAFFE), (False, Piece.LION), (False, Piece.ELEPHANT)],
-        [None, (False, Piece.CHICK), None],
+        [(True, Piece.GIRAFFE), (True, Piece.LION), (True, Piece.ELEPHANT)],
+        [None, (True, Piece.CHICK), None],
         [None, None, None],
-        [(True, Piece.ELEPHANT), (True, Piece.LION), (True, Piece.GIRAFFE)],
+        [(False, Piece.ELEPHANT), (False, Piece.LION), (False, Piece.GIRAFFE)],
     ]
 
     having_lion = empty_hands.copy()
