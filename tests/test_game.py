@@ -17,7 +17,7 @@ def test_init():
         [(True, Piece.GIRAFFE), (True, Piece.LION), (True, Piece.ELEPHANT)],
         [None, (True, Piece.CHICK), None],
         [None, (False, Piece.CHICK), None],
-        [(True, Piece.ELEPHANT), (True, Piece.LION), (True, Piece.GIRAFFE)],
+        [(False, Piece.ELEPHANT), (False, Piece.LION), (False, Piece.GIRAFFE)],
     ]
 
     g = Game(f"1\n001000\ngle\n.C.\n...\nELG")
@@ -33,17 +33,26 @@ def test_init():
         [(True, Piece.ELEPHANT), (True, Piece.LION), (True, Piece.GIRAFFE)],
     ]
 
-    g = Game(f"1\n000001\nGEC\n....\nE.G")
-    assert g.turn == 1
-    empty_hands = {
-        Piece.GIRAFFE: 1,
-        Piece.ELEPHANT: 1,
-        Piece.CHICK: 1,
-    }
-    assert g.hands == (empty_hands, empty_hands)
+    having_lion = empty_hands.copy()
+    having_lion[Piece.LION] = 1
+
+    g = Game(f"65537\n000000\ng.e\n.c.\n.C.\nELG")
+
+    assert g.turn == 65537
+    assert g.hands == (having_lion, empty_hands)
     assert g.table == [
-        [(False, Piece.GIRAFFE), None, (False, Piece.ELEPHANT)],
-        [None, (False, Piece.CHICK), None],
+        [(True, Piece.GIRAFFE), None, (True, Piece.ELEPHANT)],
         [None, (True, Piece.CHICK), None],
-        [(True, Piece.ELEPHANT), None, (True, Piece.GIRAFFE)],
+        [None, (False, Piece.CHICK), None],
+        [(False, Piece.ELEPHANT), (False, Piece.LION), (False, Piece.GIRAFFE)],
+    ]
+    g = Game(f"65537\n000000\ngle\n.c.\n.C.\nE.G")
+
+    assert g.turn == 65537
+    assert g.hands == (empty_hands, having_lion)
+    assert g.table == [
+        [(True, Piece.GIRAFFE), (True, Piece.LION), (True, Piece.ELEPHANT)],
+        [None, (True, Piece.CHICK), None],
+        [None, (False, Piece.CHICK), None],
+        [(False, Piece.ELEPHANT), None, (False, Piece.GIRAFFE)],
     ]
