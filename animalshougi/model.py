@@ -19,7 +19,7 @@ class Game:
     hands: tuple[dict[Piece, int], dict[Piece, int]]
     table: list[list[tuple[bool, Piece] | None]]
 
-    def __init__(self, *args) -> bool:
+    def __init__(self, *args):
         argc = len(args)
         if argc == 0:
             self.turn = 0
