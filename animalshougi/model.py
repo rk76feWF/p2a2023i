@@ -12,6 +12,35 @@ class Piece(enum.Enum):
     HEN = enum.auto()
 
 
+def _square_repr(square: tuple[bool, Piece] | None) -> str:
+    if not square:
+        return "."
+    if square[0]:
+        match square[1]:
+            case Piece.LION:
+                return "l"
+            case Piece.GIRAFFE:
+                return "g"
+            case Piece.ELEPHANT:
+                return "e"
+            case Piece.CHICK:
+                return "c"
+            case Piece.HEN:
+                return "h"
+    else:
+        match square[1]:
+            case Piece.LION:
+                return "L"
+            case Piece.GIRAFFE:
+                return "G"
+            case Piece.ELEPHANT:
+                return "E"
+            case Piece.CHICK:
+                return "C"
+            case Piece.HEN:
+                return "H"
+
+
 class Game:
     """A class of animalshougi game."""
 
@@ -88,3 +117,11 @@ class Game:
             raise TypeError(
                 f"Game.__init__() takes 1 or 2 positional arguments but {argc} were given"
             )
+
+    def __repr__(self) -> str:
+        return f"""{self.turn}
+{self.hands[False][Piece.GIRAFFE]}{self.hands[False][Piece.ELEPHANT]}{self.hands[False][Piece.CHICK]}{self.hands[True][Piece.GIRAFFE]}{self.hands[True][Piece.ELEPHANT]}{self.hands[True][Piece.CHICK]}
+{_square_repr(self.table[0][0])}{_square_repr(self.table[0][1])}{_square_repr(self.table[0][2])}
+{_square_repr(self.table[1][0])}{_square_repr(self.table[1][1])}{_square_repr(self.table[1][2])}
+{_square_repr(self.table[2][0])}{_square_repr(self.table[2][1])}{_square_repr(self.table[2][2])}
+{_square_repr(self.table[3][0])}{_square_repr(self.table[3][1])}{_square_repr(self.table[3][2])}"""
