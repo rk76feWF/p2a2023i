@@ -118,7 +118,7 @@ class Game:
                 f"Game.__init__() takes 1 or 2 positional arguments but {argc} were given"
             )
 
-    def __eq__(self, other) -> bool | type(NotImplemented):
+    def __eq__(self, other) -> bool:
         if type(self) is not Game:
             raise TypeError(
                 f"descriptor '__eq__' requires a 'Game' object but received a '{type(self).__name__}'"
