@@ -90,3 +90,36 @@ def test_game_repr():
     assert (
         repr(Game("12\n000000\nH.e\n.lc\n.E.\nhLG")) == "12\n000000\nH.e\n.lc\n.E.\nhLG"
     )  # 鶏になる
+
+
+def test_eq():
+    g = Game()
+    assert g == Game()
+    assert g == Game("0\n000000\ngle\n.c.\n.C.\nELG")
+
+    sample = lambda x: Game(x) == Game(x)
+
+    assert sample("0\n000000\ngle\n.c.\n.C.\nELG")
+    assert sample("1\n001000\ngle\n.C.\n...\nELG")
+    assert sample("2\n001001\ng.e\n.l.\n...\nELG")
+    assert sample("3\n001001\ng.e\n.l.\n.E.\n.LG")
+    assert sample("4\n001000\ng.e\n.lc\n.E.\n.LG")
+    assert sample("9\n100000\n..e\nClc\n.E.\n.LG")
+    assert sample("11\n100000\nH.e\n.lc\n.E.\n.LG")
+    assert sample("12\n000000\nH.e\n.lc\n.E.\nhLG")
+
+    assert g != Game("1\n001000\ngle\n.C.\n...\nELG")
+
+    class ALL_EQ:
+        def __eq__(*_):
+            return True
+
+    assert g == ALL_EQ()
+    assert ALL_EQ() == g
+
+    class ALL_NE:
+        def __eq__(*_):
+            return False
+
+    assert g != ALL_NE()
+    assert ALL_NE() != g
