@@ -118,6 +118,19 @@ class Game:
                 f"Game.__init__() takes 1 or 2 positional arguments but {argc} were given"
             )
 
+    def __eq__(self, other) -> bool | type(NotImplemented):
+        if type(self) is not Game:
+            raise TypeError(
+                f"descriptor '__eq__' requires a 'Game' object but received a '{type(self).__name__}'"
+            )
+        if type(other) is not Game:
+            return NotImplemented
+        return (
+            self.turn == other.turn
+            and self.hands == other.hands
+            and self.table == other.table
+        )
+
     def __repr__(self) -> str:
         return f"""{self.turn}
 {self.hands[False][Piece.GIRAFFE]}{self.hands[False][Piece.ELEPHANT]}{self.hands[False][Piece.CHICK]}{self.hands[True][Piece.GIRAFFE]}{self.hands[True][Piece.ELEPHANT]}{self.hands[True][Piece.CHICK]}
