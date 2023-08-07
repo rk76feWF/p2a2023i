@@ -123,3 +123,24 @@ def test_eq():
 
     assert g != ALL_NE()
     assert ALL_NE() != g
+
+
+def test_can_move():
+    g = Game()
+    assert not g.can_move((0, 3), (1, 3))
+    assert not g.can_move((0, 3), (1, 2))
+    assert not g.can_move((0, 3), (2, 1))
+
+    assert g.can_move((1, 3), (0, 2))
+    assert not g.can_move((1, 3), (1, 2))
+    assert g.can_move((1, 3), (2, 2))
+
+    assert g.can_move((2, 3), (2, 2))
+    assert not g.can_move((2, 3), (1, 3))
+    assert g.can_move((1, 2), (1, 1))
+
+    assert g.can_move((1, 1), (1, 2))
+
+    assert g.can_move((0, 0), (0, 1))
+
+    assert not g.can_move((0, 2), (0, 1))
