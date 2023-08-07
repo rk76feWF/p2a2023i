@@ -56,3 +56,37 @@ def test_init():
         [None, (False, Piece.CHICK), None],
         [(False, Piece.ELEPHANT), None, (False, Piece.GIRAFFE)],
     ]
+
+
+def test_game_repr():
+    game = Game()  # サンプルのGameオブジェクトを作成
+    serialized = game.__repr__()  # Gameオブジェクトの__repr__メソッドを呼び出し、シリアライズされた文字列を取得
+
+    # 期待されるシリアライズ結果と比較してテストする
+    expected = "0\n000000\ngle\n.c.\n.C.\nELG"
+
+    assert serialized == expected
+    assert (
+        repr(Game("0\n000000\ngle\n.c.\n.C.\nELG")) == "0\n000000\ngle\n.c.\n.C.\nELG"
+    )
+    assert (
+        repr(Game("1\n001000\ngle\n.C.\n...\nELG")) == "1\n001000\ngle\n.C.\n...\nELG"
+    )  # 先手が持ち駒を得る
+    assert (
+        repr(Game("2\n001001\ng.e\n.l.\n...\nELG")) == "2\n001001\ng.e\n.l.\n...\nELG"
+    )  # 後手が持ち駒を得る
+    assert (
+        repr(Game("3\n001001\ng.e\n.l.\n.E.\n.LG")) == "3\n001001\ng.e\n.l.\n.E.\n.LG"
+    )
+    assert (
+        repr(Game("4\n001000\ng.e\n.lc\n.E.\n.LG")) == "4\n001000\ng.e\n.lc\n.E.\n.LG"
+    )
+    assert (
+        repr(Game("9\n100000\n..e\nClc\n.E.\n.LG")) == "9\n100000\n..e\nClc\n.E.\n.LG"
+    )
+    assert (
+        repr(Game("11\n100000\nH.e\n.lc\n.E.\n.LG")) == "11\n100000\nH.e\n.lc\n.E.\n.LG"
+    )  # 鶏になる
+    assert (
+        repr(Game("12\n000000\nH.e\n.lc\n.E.\nhLG")) == "12\n000000\nH.e\n.lc\n.E.\nhLG"
+    )  # 鶏になる
