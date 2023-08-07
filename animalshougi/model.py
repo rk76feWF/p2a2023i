@@ -16,8 +16,9 @@ class Piece(enum.Enum):
     CHICK = enum.auto()
     HEN = enum.auto()
 
-    def can_move_toward(self, piece, dir):
-        if piece is Piece.LION:
+    def can_move_toward(self, dir: Direction) -> bool:
+        """Returns whether `self` can move toward `dir` or not."""
+        if self is Piece.LION:
             return (
                 dir is Direction.FORWARD
                 or dir is Direction.FORWARD_CROSS
@@ -25,17 +26,17 @@ class Piece(enum.Enum):
                 or dir is Direction.BACKWARD_CROSS
                 or dir is Direction.BACKWARD
             )
-        if piece is Piece.GIRAFFE:
+        if self is Piece.GIRAFFE:
             return (
                 dir is Direction.FORWARD
                 or dir is Direction.HORIZONTAL
                 or dir is Direction.BACKWARD
             )
-        if piece is Piece.ELEPHANT:
+        if self is Piece.ELEPHANT:
             return dir is Direction.FORWARD_CROSS or dir is Direction.BACKWARD_CROSS
-        if piece is Piece.CHICK:
+        if self is Piece.CHICK:
             return dir is Direction.FORWARD
-        if piece is Piece.HEN:
+        if self is Piece.HEN:
             return (
                 dir is Direction.FORWARD
                 or dir is Direction.FORWARD_CROSS
