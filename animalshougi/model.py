@@ -1,5 +1,10 @@
 import enum
 
+Direction = enum.Enum(
+    "Direction",
+    ["FORWARD", "FORWARD_CROSS", "HORIZONTAL", "BACKWARD_CROSS", "BACKWARD"],
+)
+
 
 @enum.unique
 class Piece(enum.Enum):
