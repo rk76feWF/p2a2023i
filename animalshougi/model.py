@@ -46,6 +46,23 @@ def _square_repr(square: tuple[bool, Piece] | None) -> str:
                 return "H"
 
 
+def _make_direction(horizontal_delta, vertical_delta) -> Direction | None:
+    if horizontal_delta < 0:
+        horizontal_delta = -horizontal_delta
+    if vertical_delta == -1:
+        if horizontal_delta == 0:
+            return Direction.FORWARD
+        if horizontal_delta == 1:
+            return Direction.FORWARD_CROSS
+    if vertical_delta == 0 and horizontal_delta == 1:
+        return Direction.HORIZONTAL
+    if vertical_delta == 1:
+        if horizontal_delta == 0:
+            return Direction.BACKWARD
+        if horizontal_delta == 1:
+            return Direction.BACKWARD_CROSS
+
+
 class Game:
     """A class of animalshougi game."""
 
@@ -143,3 +160,20 @@ class Game:
 {_square_repr(self.table[1][0])}{_square_repr(self.table[1][1])}{_square_repr(self.table[1][2])}
 {_square_repr(self.table[2][0])}{_square_repr(self.table[2][1])}{_square_repr(self.table[2][2])}
 {_square_repr(self.table[3][0])}{_square_repr(self.table[3][1])}{_square_repr(self.table[3][2])}"""
+
+    def can_move(self, src: tuple[int, int], dst: tuple[int, int]) -> bool:
+        """Returns whether the piece can move from `src` to `dir` or not."""
+
+        if not self.table[src[1]][src[0]]:
+            return False
+        if (
+            self.table[dst[1]][dst[0]]
+            and self.table[src[1]][src[0]][0] == self.table[dst[1]][dst[0]][0]
+        ):
+            return False
+        return self.table[src[1]][src[0]][1].can_move_toward(
+            _make_direction(
+                dst[0] - src[0],
+                src[1] - dst[1] if self.table[src[1]][src[0]][0] else dst[1] - src[1],
+            )
+        )
