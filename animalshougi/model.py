@@ -191,22 +191,23 @@ class Game:
 {_square_repr(self.table[2][0])}{_square_repr(self.table[2][1])}{_square_repr(self.table[2][2])}
 {_square_repr(self.table[3][0])}{_square_repr(self.table[3][1])}{_square_repr(self.table[3][2])}"""
 
-    def can_move(self, src: tuple[int, int], dst: tuple[int, int]) -> bool:
-        """Returns whether the piece can move from `src` to `dir` or not."""
 
-        if not self.table[src[1]][src[0]]:
-            return False
-        if (
-            self.table[dst[1]][dst[0]]
-            and self.table[src[1]][src[0]][0] == self.table[dst[1]][dst[0]][0]
-        ):
-            return False
-        return self.table[src[1]][src[0]][1].can_move_toward(
-            _make_direction(
-                dst[0] - src[0],
-                src[1] - dst[1] if self.table[src[1]][src[0]][0] else dst[1] - src[1],
-            )
+def can_move(self, src: tuple[int, int], dst: tuple[int, int]) -> bool:
+    """Returns whether the piece can move from `src` to `dir` or not."""
+
+    source_square = self.table[src[1]][src[0]]
+    destination_square = self.table[dst[1]][dst[0]]
+
+    if type(source_square) is not tuple:
+        return False
+    if type(destination_square) is tuple and source_square[0] == destination_square[0]:
+        return False
+    return source_square[1].can_move_toward(
+        _make_direction(
+            dst[0] - src[0],
+            src[1] - dst[1] if source_square[0] else dst[1] - src[1],
         )
+    )
 
     def _is_attacking(self, attacker: bool, coord: tuple[int, int]) -> bool:
         for rank_id in (
