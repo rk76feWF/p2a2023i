@@ -144,3 +144,18 @@ def test_can_move():
     assert g.can_move((0, 0), (0, 1))
 
     assert not g.can_move((0, 2), (0, 1))
+
+
+def test_winner():
+    g = Game()
+    assert g.winner() is None
+
+    assert Game("0\n000000\ng.e\n.c.\n.C.\nELG").winner() == False
+
+    assert Game("0\n000000\ngle\n.c.\n.C.\nE.G").winner() == True
+
+    assert Game("0\n000000\ng.L\nlc.\n.C.\nE.G").winner() == False
+    assert Game("0\n000000\n.gL\nlc.\n.C.\nE.G").winner() == True
+
+    assert Game("0\n000000\ng.e\n.c.\n.CL\nl.G").winner() == True
+    assert Game("0\n000000\ng.e\n.c.\n.CL\nlG.").winner() == False

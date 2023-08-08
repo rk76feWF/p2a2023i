@@ -16,6 +16,34 @@ class Piece(enum.Enum):
     CHICK = enum.auto()
     HEN = enum.auto()
 
+    def can_move_toward(self, dir: Direction | None) -> bool:
+        """Returns whether `self` can move toward `dir` or not."""
+        if self is Piece.LION:
+            return (
+                dir is Direction.FORWARD
+                or dir is Direction.FORWARD_CROSS
+                or dir is Direction.HORIZONTAL
+                or dir is Direction.BACKWARD_CROSS
+                or dir is Direction.BACKWARD
+            )
+        if self is Piece.GIRAFFE:
+            return (
+                dir is Direction.FORWARD
+                or dir is Direction.HORIZONTAL
+                or dir is Direction.BACKWARD
+            )
+        if self is Piece.ELEPHANT:
+            return dir is Direction.FORWARD_CROSS or dir is Direction.BACKWARD_CROSS
+        if self is Piece.CHICK:
+            return dir is Direction.FORWARD
+        if self is Piece.HEN:
+            return (
+                dir is Direction.FORWARD
+                or dir is Direction.FORWARD_CROSS
+                or dir is Direction.HORIZONTAL
+                or dir is Direction.BACKWARD
+            )
+
 
 def _square_repr(square: tuple[bool, Piece] | None) -> str:
     if not square:
@@ -61,6 +89,8 @@ def _make_direction(horizontal_delta, vertical_delta) -> Direction | None:
             return Direction.BACKWARD
         if horizontal_delta == 1:
             return Direction.BACKWARD_CROSS
+
+    return None
 
 
 class Game:
@@ -177,3 +207,46 @@ class Game:
                 src[1] - dst[1] if self.table[src[1]][src[0]][0] else dst[1] - src[1],
             )
         )
+
+    def _is_attacking(self, attacker: bool, coord: tuple[int, int]) -> bool:
+        for rank_id in (
+            range(0, 2)
+            if coord[1] == 0
+            else range(2, 4)
+            if coord[1] == 3
+            else range(coord[1] - 1, coord[1] + 2)
+        ):
+            for file_id in (
+                range(0, 2)
+                if coord[0] == 0
+                else range(1, 3)
+                if coord[0] == 2
+                else range(0, 3)
+            ):
+                square = self.table[rank_id][file_id]
+                if (
+                    type(square) is tuple
+                    and square[0] == attacker
+                    and square[1].can_move_toward(
+                        _make_direction(file_id - coord[0], rank_id - coord[1])
+                        if attacker
+                        else _make_direction(coord[0] - file_id, coord[1] - rank_id)
+                    )
+                ):
+                    return True
+        return False
+
+    def winner(self) -> bool | None:
+        if self.hands[False][Piece.LION]:
+            return False
+        if self.hands[True][Piece.LION]:
+            return True
+        f_lion = None
+        t_lion = None
+        for file_id in range(3):
+            if self.table[0][file_id] == (False, Piece.LION):
+                return self._is_attacking(True, (file_id, 0))
+        for file_id in range(3):
+            if self.table[3][file_id] == (True, Piece.LION):
+                return not self._is_attacking(False, (file_id, 3))
+        return None
