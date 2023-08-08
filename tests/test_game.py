@@ -159,3 +159,17 @@ def test_winner():
 
     assert Game("0\n000000\ng.e\n.c.\n.CL\nl.G").winner() == True
     assert Game("0\n000000\ng.e\n.c.\n.CL\nlG.").winner() == False
+
+
+def test_drop():
+    g = Game("4\n001001\n.ge\nl..\n...\nELG")
+    g.drop(Piece.CHICK, (0, 0))
+    assert g == Game("5\n000001\nCge\nl..\n...\nELG")
+
+    with pytest.raises(ValueError):
+        g.drop(Piece.GIRAFFE, (1, 2))
+    assert g == Game("5\n000001\nCge\nl..\n...\nELG")
+
+    with pytest.raises(ValueError):
+        g.drop(Piece.CHICK, (1, 3))
+    assert g == Game("5\n000001\nCge\nl..\n...\nELG")
