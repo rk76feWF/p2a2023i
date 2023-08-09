@@ -159,3 +159,45 @@ def test_winner():
 
     assert Game("0\n000000\ng.e\n.c.\n.CL\nl.G").winner() == True
     assert Game("0\n000000\ng.e\n.c.\n.CL\nlG.").winner() == False
+
+
+def test_move():
+    g = Game()
+    g.move((1, 2), (1, 1))
+    assert g == Game("1\n001000\ngle\n.C.\n...\nELG")
+
+    with pytest.raises(ValueError):
+        g.move((1, 3), (1, 2))
+    assert g == Game("1\n001000\ngle\n.C.\n...\nELG")
+
+    g.move((1, 0), (0, 1))
+    assert g == Game("2\n001000\ng.e\nlC.\n...\nELG")
+
+    with pytest.raises(ValueError):
+        g.move((0, 3), (0, 2))
+    assert g == Game("2\n001000\ng.e\nlC.\n...\nELG")
+
+    g.move((1, 1), (1, 0))
+    assert g == Game("3\n001000\ngHe\nl..\n...\nELG")
+
+    g.move((0, 1), (0, 2))
+    assert g == Game("4\n001000\ngHe\n...\nl..\nELG")
+
+    g.move((1, 3), (2, 2))
+    assert g == Game("5\n001000\ngHe\n...\nl.L\nE.G")
+
+    g.move((0, 2), (0, 3))
+    assert g == Game("6\n001010\ngHe\n...\n..L\nl.G")
+    assert g.winner() == True
+
+    with pytest.raises(ValueError):
+        g.move((2, 3), (1, 3))
+    assert g == Game("6\n001010\ngHe\n...\n..L\nl.G")
+
+    g = Game("1\n000000\n.l.\n...\n.c.\n.L.")
+    g.move((1, 2), (1, 3))
+    assert g == Game("2\n000000\n.l.\n...\n...\n.h.")
+    assert g.winner() == True
+
+    with pytest.raises(ValueError):
+        Game("1\n000000\ng.e\n.c.\n.C.\nELG").move((0, 0), (0, 1))
