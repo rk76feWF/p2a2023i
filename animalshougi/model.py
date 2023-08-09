@@ -253,3 +253,17 @@ class Game:
             if self.table[3][file_id] == (True, Piece.LION):
                 return not self._is_attacking(False, (file_id, 3))
         return None
+
+    def drop(self, hand: Piece, dst: tuple[int, int]):
+        """Drops the `Piece` `hand` on `dst` if possible. otherwise, operates nothing and raises an error."""
+
+        player = bool(self.turn % 2)
+        if self.winner() is not None:
+            raise ValueError("The game has already finished")
+        if hand is Piece.HEN or self.hands[player][hand] <= 0:
+            raise ValueError(f"The player {player} has no piece {hand}")
+        if self.table[dst[1]][dst[0]]:
+            raise ValueError(f"A piece already exists at {dst}")
+        self.table[dst[1]][dst[0]] = (player, hand)
+        self.hands[player][hand] -= 1
+        self.turn += 1
