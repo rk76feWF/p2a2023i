@@ -254,12 +254,40 @@ class Game:
                 return not self._is_attacking(False, (file_id, 3))
         return None
 
+    def move(self, src: tuple[int, int], dst: tuple[int, int]):
+        """Moves the piece at `src` to `dst` if possible. otherwise, operates nothing and raises an error."""
+        source_square = self.table[src[1]][src[0]]
+        destination_square = self.table[dst[1]][dst[0]]
+
+        player = bool(self.turn % 2)
+        if self.winner() is not None:
+            raise ValueError("The game has already finished")
+        if not source_square:
+            raise ValueError(f"No piece at {src}")
+        if player != source_square[0]:
+            raise ValueError(f"Cannot move piece of player {source_square[0]}")
+        if not self.can_move(src, dst):
+            raise ValueError(
+                f"Cannot move piece {source_square} from {src} {dst} {destination_square}"
+            )
+        if destination_square:
+            piece = destination_square[1]
+            self.hands[player][piece if piece != Piece.HEN else Piece.CHICK] += 1
+        self.table[dst[1]][dst[0]] = (
+            (player, Piece.HEN)
+            if source_square[1] == Piece.CHICK and (dst[1] == 0 or dst[1] == 3)
+            else source_square
+        )
+        self.table[src[1]][src[0]] = None
+        self.turn += 1
+
     def drop(self, hand: Piece, dst: tuple[int, int]):
         """Drops the `Piece` `hand` on `dst` if possible. otherwise, operates nothing and raises an error."""
 
         player = bool(self.turn % 2)
         if self.winner() is not None:
             raise ValueError("The game has already finished")
+
         if hand is Piece.HEN or self.hands[player][hand] <= 0:
             raise ValueError(f"The player {player} has no piece {hand}")
         if self.table[dst[1]][dst[0]]:
